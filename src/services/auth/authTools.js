@@ -7,7 +7,7 @@ const basicAuthMiddleware = async (req, res, next) => {
     error.httpStatusCode = 401
     next(error)
   } else {
-    const [email, password] = atob(
+    const [userName, password] = atob(
       req.headers.authorization.split(" ")[1]
     ).split(":")
 
