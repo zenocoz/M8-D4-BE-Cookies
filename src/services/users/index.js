@@ -1,6 +1,7 @@
 const express = require("express")
 const UserModel = require("./schema")
 const { adminOnly, basic } = require("../auth/authTools")
+const { authenticate } = require("../auth/")
 
 const usersRouter = express.Router()
 
@@ -54,6 +55,21 @@ usersRouter.delete("/me", basic, async (req, res, next) => {
   } catch (error) {
     next(error)
   }
+})
+
+usersRouter.post("/login", async (req, res, next) => {
+  try {
+    //check credentials
+
+    const { userName, password } = req.body
+    const user = await UserModel.findByCredentials(userName, password)
+
+    //generate token
+    const accessToken = await authenticate(user)
+
+    // send back tokens
+    res.send({ accessToken })
+  } catch {}
 })
 
 module.exports = usersRouter
