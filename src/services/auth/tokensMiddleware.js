@@ -3,7 +3,9 @@ const UserModel = require("../users/schema")
 
 const authorize = async (req, res, next) => {
   try {
-    const token = req.header("Authorization").replace("Bearer ", "")
+    // const token = req.header("Authorization").replace("Bearer ", "")
+
+    const token = req.cookies.accessToken
 
     const decoded = await verifyJWT(token)
 

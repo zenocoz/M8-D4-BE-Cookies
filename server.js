@@ -4,6 +4,7 @@ const { join } = require("path")
 const listEndpoints = require("express-list-endpoints")
 const mongoose = require("mongoose")
 const passport = require("passport")
+const cookieParser = require("cookie-parser")
 
 const oauth = require("./src/services/auth/oauth") // hack to paste all the content of oauth
 
@@ -24,6 +25,7 @@ const port = process.env.PORT || 3005
 // const staticFolderPath = join(__dirname, "../public")
 // server.use(express.static(staticFolderPath))
 server.use(express.json())
+server.use(cookieParser()) //we can read content of cookies
 server.use(passport.initialize())
 
 server.use("/users", usersRouter)

@@ -4,6 +4,7 @@ const { adminOnly, basic } = require("../auth/authTools")
 const { authenticate } = require("../auth/")
 const { authorize } = require("../auth/tokensMiddleware")
 const passport = require("passport")
+const { reset } = require("nodemon")
 
 const usersRouter = express.Router()
 
@@ -91,8 +92,10 @@ usersRouter.get(
         httpOnly: true,
         path: "/users/refreshToken",
       })
+      console.log(req.user)
+      res.cookie("userLogged", "presente")
 
-      res.status(200).redirect("http://localhost:3001/auth/signup")
+      res.status(200).redirect("http://localhost:3001/")
     } catch (error) {
       next(error)
     }
