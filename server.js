@@ -3,6 +3,9 @@ const cors = require("cors")
 const { join } = require("path")
 const listEndpoints = require("express-list-endpoints")
 const mongoose = require("mongoose")
+const passport = require("passport")
+
+const oauth = require("./src/services/auth/oauth") // hack to paste all the content of oauth
 
 const usersRouter = require("./src/services/users")
 
@@ -21,6 +24,7 @@ const port = process.env.PORT || 3005
 // const staticFolderPath = join(__dirname, "../public")
 // server.use(express.static(staticFolderPath))
 server.use(express.json())
+server.use(passport.initialize())
 
 server.use("/users", usersRouter)
 
@@ -36,7 +40,7 @@ console.log(listEndpoints(server))
 // mongoose.set("debug", true)
 
 mongoose
-  .connect("mongodb://localhost:27017/TestAuth", {
+  .connect(process.env.MONGO_LOCAL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,

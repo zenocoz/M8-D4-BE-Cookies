@@ -3,6 +3,7 @@ const UserModel = require("./schema")
 const { adminOnly, basic } = require("../auth/authTools")
 const { authenticate } = require("../auth/")
 const { authorize } = require("../auth/tokensMiddleware")
+const passport = require("passport")
 
 const usersRouter = express.Router()
 
@@ -72,5 +73,30 @@ usersRouter.post("/login", async (req, res, next) => {
     res.send({ accessToken })
   } catch {}
 })
+
+usersRouter.get(
+  "/googleLogin",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+)
+
+// usersRouter.get(
+//   "/googleRedirect",
+//   passport.authenticate("google"),
+//   async (req, res, next) => {
+//     try {
+//       res.cookie("accessToken", req.user.tokens.accessToken, {
+//         httpOnly: true,
+//       })
+//       res.cookie("refreshToken", req.user.tokens.refreshToken, {
+//         httpOnly: true,
+//         path: "/users/refreshToken",
+//       })
+
+//       res.status(200).redirect("http://localhost:3000/")
+//     } catch (error) {
+//       next(error)
+//     }
+//   }
+// )
 
 module.exports = usersRouter
