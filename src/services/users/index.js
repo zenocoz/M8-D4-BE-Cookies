@@ -2,10 +2,11 @@ const express = require("express")
 const UserModel = require("./schema")
 const { adminOnly, basic } = require("../auth/authTools")
 const { authenticate } = require("../auth/")
+const { authorize } = require("../auth/tokensMiddleware")
 
 const usersRouter = express.Router()
 
-usersRouter.get("/", basic, adminOnly, async (req, res, next) => {
+usersRouter.get("/", authorize, async (req, res, next) => {
   try {
     const users = await UserModel.find()
     res.send(users)
