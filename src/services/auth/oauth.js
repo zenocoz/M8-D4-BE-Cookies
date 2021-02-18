@@ -10,7 +10,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.CALLBACK_URL,
     },
-    async (accessToken, refreshToken, profile, cb) => {
+    async (accessToken, refreshToken, profile, done) => {
       console.log(profile)
       const newUser = {
         googleId: profile.id,
@@ -25,15 +25,15 @@ passport.use(
 
         if (user) {
           const tokens = await authenticate(user)
-          next(null, { user, tokens })
+          done(null, { user, tokens })
         } else {
           const createdUser = new UserModel(newUser)
           await createdUser.save()
           const tokens = await authenticate(createdUser)
-          next(null, { user: createdUser, tokens })
+          done(null, { user: createdUser, tokens })
         }
       } catch (error) {
-        next(error)
+        done(error)
       }
     }
   )

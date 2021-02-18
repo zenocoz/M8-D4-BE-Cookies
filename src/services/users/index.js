@@ -83,7 +83,19 @@ usersRouter.get(
   "/googleRedirect",
   passport.authenticate("google"),
   async (req, res, next) => {
-    res.send("ok")
+    try {
+      res.cookie("accessToken", req.user.tokens.accessToken, {
+        httpOnly: true,
+      })
+      res.cookie("refreshToken", req.user.tokens.refreshToken, {
+        httpOnly: true,
+        path: "/users/refreshToken",
+      })
+
+      res.status(200).redirect("http://localhost:3001/auth/signup")
+    } catch (error) {
+      next(error)
+    }
   }
 )
 
